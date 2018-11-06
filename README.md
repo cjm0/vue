@@ -17,4 +17,6 @@ yarn dev
 
 `vue2.5 vue-loader15 vue-router3 webpack4 babel7 axios`
 
+## 地址
 
+[vue 单页模板](vue.bigqianduan.top)
