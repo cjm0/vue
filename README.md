@@ -19,4 +19,4 @@ yarn dev
 
 ## 地址
 
-[vue 单页模板](vue.bigqianduan.top)
+[vue 单页模板](http://vue.bigqianduan.top)
