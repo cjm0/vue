@@ -1,9 +1,9 @@
 {
-  "name": "vue2-multi-page",
+  "name": "vue-template",
   "version": "1.0.0",
   "description": "A Vue.js project",
   "author": "chenjianmin <129300400@qq.com>",
-  "private": true,
+  "private": false,
   "scripts": {
     "start": "webpack --config config/webpack.dll.js",
     "dev": "webpack-dev-server --progress --config config/webpack.dev.js",
