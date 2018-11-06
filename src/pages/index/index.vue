@@ -15,7 +15,7 @@
         img(src="../../assets/img/favicon.png")
         p this is a background img 
         p.bg
-        a(href="/temp") to temp
+        a(href="/#/temp") to temp
 </template>
 
 <script>
