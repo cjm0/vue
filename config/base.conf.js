@@ -22,45 +22,16 @@ module.exports = {
     dev: {
         useEslint: true,
         host: getIp(),
-        port: 3006,
-        proxy: {
-            '/': {
-                target: 'https://bm.jindanlicai.com/',
-                changeOrigin: true, // 将主机头的源更改为目标URL
-                cookieDomainRewrite: { // 重写set-cookie标头的域
-                    "*": getIp()
-                },
-                bypass: function(req, res, proxyOptions) {
-                    if (req.headers.accept.indexOf('html') !== -1) {
-                        console.log('Skipping proxy for browser request.');
-                        return '/index.html';
-                    }
-                }
-            },
-            '/v2': {
-                //target: 'https://bm.jindanlicai.com/',
-                target: 'http://xwm.jindanlicai.com:8436/',
+        port: 3001,
+        proxy: [
+            {
+                context: ['/v2', '/xw', '/wap', '/information'],
+                target: 'https://xwm.jindanlicai.com/',
                 changeOrigin: true,
-                cookieDomainRewrite: {
-                    "*": getIp()
+                cookieDomainRewrite:{
+                    "*":getIp()
                 }
             },
-            '/wap': {
-                //target: 'https://bm.jindanlicai.com/',
-                target: 'http://xwm.jindanlicai.com:8436/',
-                changeOrigin: true,
-                cookieDomainRewrite: {
-                    "*": getIp()
-                }
-            },
-            '/xw': {
-                //target: 'https://bm.jindanlicai.com/',
-                target: 'http://xwm.jindanlicai.com:8436/',
-                changeOrigin: true,
-                cookieDomainRewrite: {
-                    "*": getIp()
-                }
-            },
-        }
+        ]
     }
 }

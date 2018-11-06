@@ -46,14 +46,19 @@ window.cookie = (name, value, options) => {
 }
 
 
-let ua = navigator.userAgent.toLowerCase()
+// Browser environment 
+let inBrowser = typeof window !== 'undefined';
+let inWeex = typeof WXEnvironment !== 'undefined' && !!WXEnvironment.platform;
+let weexPlatform = inWeex && WXEnvironment.platform.toLowerCase();
+let UA = inBrowser && window.navigator.userAgent.toLowerCase();
 window.config = {
     load: null,
     system: {
-        isWeixin: ua.indexOf('micromessenger') > -1,
-        isApp: ua.indexOf('jindanlicai') > -1,
-        isIos: ua.indexOf('iphone') > -1,
-        isAndroid: ua.indexOf('android') > -1,
+        isIE: UA && /msie|trident/.test(UA),
+        isWeixin: UA.indexOf('micromessenger') > -1,
+        isApp: UA.indexOf('jindanlicai') > -1,
+        isIOS: (UA && /iphone|ipad|ipod|ios/.test(UA)) || (weexPlatform === 'ios'),
+        isAndroid: (UA && UA.indexOf('android') > 0) || (weexPlatform === 'android'),
         isIphoneX: /iphone/gi.test(navigator.userAgent) && (screen.height === 812 && screen.width === 375)
     }
 }

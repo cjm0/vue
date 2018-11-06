@@ -6,6 +6,7 @@ const webpack = require('webpack')
 const merge = require('webpack-merge')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const CleanWebpackPlugin = require('clean-webpack-plugin')
+const CopyWebpackPlugin = require('copy-webpack-plugin')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const OptimizeCss = require('optimize-css-assets-webpack-plugin')
 
@@ -29,6 +30,19 @@ module.exports = merge(baseWebpackConfig, {
                 exclude: ['vendor.dll.js', 'vendor.manifest.json'], // 这几个文件不删除
                 verbose: false, // 开启在控制台输出信息
                 dry: false, // 启用删除文件
+            }
+        ),
+        new CopyWebpackPlugin( // 这部分不会被 webpack loader 处理
+            [ 
+                { 
+                    from: path.resolve(__dirname, '../src/public/'),
+                    to: 'public/',
+                },
+            ], 
+            {
+                ignore: [], // 可以用模糊匹配
+                copyUnmodified: true, 
+                // debug: "debug" // 是否打印复制的详细信息
             }
         ),
         new webpack.DllReferencePlugin({

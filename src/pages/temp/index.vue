@@ -1,9 +1,11 @@
 <style lang="less">
-
+    .temp_index{
+        
+    }
 </style>
 
 <template lang="pug">
-    
+    .temp_index temp
 </template>
 
 <script>
