@@ -85,6 +85,7 @@ module.exports = {
                             {
                                 loader: 'css-loader',
                                 options: {
+                                    importLoaders: 1,
                                     modules: true, // 开启 css module
                                     localIdentName: 'v_[hash:6]' // 自定义生成的类名
                                 }
@@ -92,7 +93,7 @@ module.exports = {
                             'postcss-loader' // 自动加前缀以兼容其他浏览器
                         ]
                     },
-                    // 这里匹配普通的 .css 文件 或 `<style>` 或 `<style scoped>`
+                    // 这里匹配普通的 .css 文件 或 <style>
                     {
                         use: [
                             {
@@ -123,6 +124,7 @@ module.exports = {
                             {
                                 loader: 'css-loader',
                                 options: {
+                                    importLoaders: 2,
                                     modules: true, // 开启 css module
                                     localIdentName: 'v_[hash:6]' // 自定义生成的类名
                                 }
@@ -131,7 +133,7 @@ module.exports = {
                             'less-loader'
                         ]
                     },
-                    // 这里匹配普通的 .less 文件 或 `<style lang="less">` 或 `<style lang="less" scoped>`
+                    // 这里匹配普通的 .less 文件 或 <style lang="less">
                     {
                         use: [
                             {

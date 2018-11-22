@@ -1,6 +1,7 @@
 <style lang="less">
     .index{
         .bg{
+            display: flex;
             width: 100px;
             height: 50px;
             background: url("../../assets/img/wx.jpg") 0 0 no-repeat;

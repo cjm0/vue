@@ -4,10 +4,18 @@ module.exports = {
     "plugins": {
         "postcss-import": {},
         "postcss-url": {},
-            // to edit target browsers: use "browserslist" field in package.json
+        // https://browserl.ist
+        // https://github.com/browserslist/browserslist
         "autoprefixer": {
-            // browsers: ['> 1%', 'last 2 versions', 'not ie <= 8']
-            browsers: ['> 0.5%', 'last 2 versions', 'Firefox ESR', 'not dead'] // default
+            // browsers: ['> 0.5%', 'last 3 versions'] 
+            browsers: ['> 0.5%', 'last 2 versions', 'ie > 8']
+            // browsers: ['> 0.5%', 'last 2 versions', 'Firefox ESR', 'not dead'] // default
         }
     }
 }
+
+
+
+
+
+
