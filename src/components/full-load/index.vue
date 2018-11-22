@@ -22,6 +22,8 @@ export default {
             config.load = null
         },
         show(timer, mask) {
+            console.log(1)
+
             this.hide()
             this.status = true
             this.mask = mask

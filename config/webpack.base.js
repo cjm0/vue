@@ -47,6 +47,8 @@ module.exports = {
         }
     },
     module: {
+        // 忽略的文件中不应该含有 import, require, define 的调用，或任何其他导入机制，忽略部分插件可以提高构建性能
+        noParse: /^(vue|vue-router|vuex|vuex-router-sync|axios)$/,
         rules: [
             ...(config.dev.useEslint ? [createLintingRule()] : []),
             {
@@ -60,224 +62,90 @@ module.exports = {
                 include: resolve('src')
             },
             {
-               test: /\.css$/,
-               oneOf: [
-                   { // config.module.rule('css').oneOf('vue-modules')
-                       resourceQuery: /module/,
-                       use: [
-                           {
-                               loader: prod ? MiniCssExtractPlugin.loader : 'vue-style-loader',
-                               options: {
-                                   /*
-                                       复写css文件中资源路径
-                                       因为css文件中的外链是相对与css的，
-                                       我们抽离的css文件在可能会单独放在css文件夹内
-                                       引用其他如img/a.png会寻址错误
-                                       这种情况下所以单独需要配置../../，复写其中资源的路径
-                                   */
-                                   publicPath: '../'
-                               },
-                           },
-                           {
-                               loader: 'css-loader',
-                               options: {
-                                   importLoaders: 2,
-                                   modules: true,
-                                   localIdentName: 'v_[hash:6]'
-                               }
-                           },
-                           'postcss-loader'
-                       ]
-                   },
-                   { // config.module.rule('css').oneOf('vue')
-                       resourceQuery: /\?vue/,
-                       use: [
-                           {
-                               loader: prod ? MiniCssExtractPlugin.loader : 'vue-style-loader',
-                               options: {
-                                   /*
-                                       复写css文件中资源路径
-                                       因为css文件中的外链是相对与css的，
-                                       我们抽离的css文件在可能会单独放在css文件夹内
-                                       引用其他如img/a.png会寻址错误
-                                       这种情况下所以单独需要配置../../，复写其中资源的路径
-                                   */
-                                   publicPath: '../'
-                               },
-                           },
-                           {
-                               loader: 'css-loader',
-                               options: {
-                                   importLoaders: 2
-                               }
-                           },
-                           'postcss-loader'
-                       ]
-                   },
-                   { // config.module.rule('css').oneOf('normal-modules')
-                       test: /\.module\.\w+$/,
-                       use: [
-                           {
-                               loader: prod ? MiniCssExtractPlugin.loader : 'vue-style-loader',
-                               options: {
-                                   /*
-                                       复写css文件中资源路径
-                                       因为css文件中的外链是相对与css的，
-                                       我们抽离的css文件在可能会单独放在css文件夹内
-                                       引用其他如img/a.png会寻址错误
-                                       这种情况下所以单独需要配置../../，复写其中资源的路径
-                                   */
-                                   publicPath: '../'
-                               },
-                           },
-                           {
-                               loader: 'css-loader',
-                               options: {
-                                   importLoaders: 2,
-                                   modules: true,
-                                   localIdentName: 'v_[hash:6]'
-                               }
-                           },
-                           'postcss-loader'
-                       ]
-                   },
-                   { // config.module.rule('css').oneOf('normal')
-                       use: [
-                           {
-                               loader: prod ? MiniCssExtractPlugin.loader : 'vue-style-loader',
-                               options: {
-                                   /*
-                                       复写css文件中资源路径
-                                       因为css文件中的外链是相对与css的，
-                                       我们抽离的css文件在可能会单独放在css文件夹内
-                                       引用其他如img/a.png会寻址错误
-                                       这种情况下所以单独需要配置../../，复写其中资源的路径
-                                   */
-                                   publicPath: '../'
-                               },
-                           },
-                           {
-                               loader: 'css-loader',
-                               options: {
-                                   importLoaders: 2,
-                               }
-                           },
-                           'postcss-loader'
-                       ]
-                   },
-               ]
+                test: /\.css$/,
+                oneOf: [
+                    // 这里匹配 `<style module>`
+                    {
+                        resourceQuery: /module/,
+                        use: [
+                            {
+                                // 只在生产环境下使用 CSS 提取，便于你在开发环境下进行热重载
+                                loader: prod ? MiniCssExtractPlugin.loader : 'vue-style-loader',
+                                options: {
+                                    publicPath: '../'
+                                    /*
+                                        复写css文件中资源路径
+                                        因为css文件中的外链是相对与css的，
+                                        我们抽离的css文件在可能会单独放在css文件夹内
+                                        引用其他如img/a.png会寻址错误
+                                        这种情况下所以单独需要配置../，复写其中资源的路径
+                                    */
+                                }, 
+                            },
+                            {
+                                loader: 'css-loader',
+                                options: {
+                                    modules: true, // 开启 css module
+                                    localIdentName: 'v_[hash:6]' // 自定义生成的类名
+                                }
+                            },
+                            'postcss-loader' // 自动加前缀以兼容其他浏览器
+                        ]
+                    },
+                    // 这里匹配普通的 .css 文件 或 `<style>` 或 `<style scoped>`
+                    {
+                        use: [
+                            {
+                                loader: prod ? MiniCssExtractPlugin.loader : 'vue-style-loader',
+                                options: {
+                                    publicPath: '../'
+                                }, 
+                            },
+                            'css-loader',
+                            'postcss-loader',
+                        ]
+                    }
+                ]
             },
             {
-               test: /\.less$/,
-               oneOf: [
-                   { // config.module.rule('less').oneOf('vue-modules')
-                       resourceQuery: /module/,
-                       use: [
-                           {
-                               loader: prod ? MiniCssExtractPlugin.loader : 'vue-style-loader',
-                               options: {
-                                   /*
-                                       复写css文件中资源路径
-                                       因为css文件中的外链是相对与css的，
-                                       我们抽离的css文件在可能会单独放在css文件夹内
-                                       引用其他如img/a.png会寻址错误
-                                       这种情况下所以单独需要配置../../，复写其中资源的路径
-                                   */
-                                   publicPath: '../'
-                               },
-                           },
-                           {
-                               loader: 'css-loader',
-                               options: {
-                                   importLoaders: 2,
-                                   modules: true,
-                                   localIdentName: 'v_[hash:6]'
-                               }
-                           },
-                           'postcss-loader',
-                           'less-loader'
-                       ]
-                   },
-                   { // config.module.rule('less').oneOf('vue')
-                       resourceQuery: /\?vue/,
-                       use: [
-                           {
-                               loader: prod ? MiniCssExtractPlugin.loader : 'vue-style-loader',
-                               options: {
-                                   /*
-                                       复写css文件中资源路径
-                                       因为css文件中的外链是相对与css的，
-                                       我们抽离的css文件在可能会单独放在css文件夹内
-                                       引用其他如img/a.png会寻址错误
-                                       这种情况下所以单独需要配置../../，复写其中资源的路径
-                                   */
-                                   publicPath: '../'
-                               },
-                           },
-                           {
-                               loader: 'css-loader',
-                               options: {
-                                   importLoaders: 2
-                               }
-                           },
-                           'postcss-loader',
-                           'less-loader'
-                       ]
-                   },
-                   { // config.module.rule('less').oneOf('normal-modules')
-                       test: /\.module\.\w+$/,
-                       use: [
-                           {
-                               loader: prod ? MiniCssExtractPlugin.loader : 'vue-style-loader',
-                               options: {
-                                   /*
-                                       复写css文件中资源路径
-                                       因为css文件中的外链是相对与css的，
-                                       我们抽离的css文件在可能会单独放在css文件夹内
-                                       引用其他如img/a.png会寻址错误
-                                       这种情况下所以单独需要配置../../，复写其中资源的路径
-                                   */
-                                   publicPath: '../'
-                               },
-                           },
-                           {
-                               loader: 'css-loader',
-                               options: {
-                                   importLoaders: 2,
-                                   modules: true,
-                                   localIdentName: 'v_[hash:6]'
-                               }
-                           },
-                           'postcss-loader',
-                           'less-loader'
-                       ]
-                   },
-                   { // config.module.rule('less').oneOf('normal')
-                       use: [
-                           {
-                               loader: prod ? MiniCssExtractPlugin.loader : 'vue-style-loader',
-                               options: {
-                                   /*
-                                       复写css文件中资源路径
-                                       因为css文件中的外链是相对与css的，
-                                       我们抽离的css文件在可能会单独放在css文件夹内
-                                       引用其他如img/a.png会寻址错误
-                                       这种情况下所以单独需要配置../../，复写其中资源的路径
-                                   */
-                                   publicPath: '../'
-                               },
-                           },
-                           {
-                               loader: 'css-loader',
-                               options: {
-                                   importLoaders: 2,
-                               }
-                           },
-                           'postcss-loader',
-                           'less-loader'
-                       ]
-                   },
-               ]
+                test: /\.less$/,
+                oneOf: [
+                    // 这里匹配 `<style lang="less" module>`
+                    {
+                        resourceQuery: /module/,
+                        use: [
+                            {
+                                loader: prod ? MiniCssExtractPlugin.loader : 'vue-style-loader',
+                                options: {
+                                    publicPath: '../'
+                                }, 
+                            },
+                            {
+                                loader: 'css-loader',
+                                options: {
+                                    modules: true, // 开启 css module
+                                    localIdentName: 'v_[hash:6]' // 自定义生成的类名
+                                }
+                            },
+                            'postcss-loader',
+                            'less-loader'
+                        ]
+                    },
+                    // 这里匹配普通的 .less 文件 或 `<style lang="less">` 或 `<style lang="less" scoped>`
+                    {
+                        use: [
+                            {
+                                loader: prod ? MiniCssExtractPlugin.loader : 'vue-style-loader',
+                                options: {
+                                    publicPath: '../'
+                                }, 
+                            },
+                            'css-loader',
+                            'postcss-loader',
+                            'less-loader'
+                        ]
+                    }
+                ]
             },
             {
                 test: /\.js$/,
@@ -286,8 +154,9 @@ module.exports = {
                     /node_modules/.test(file) && !/\.vue\.js/.test(file)
                 )
             },
+            // url-loader 包含 file-loader，先把小于 4kb 的文件转换成 base64，然后交传给 file-loader 去处理路径问题
             {
-                test: /\.(png|jpe?g|gif|svg)(\?.*)?$/,
+                test: /\.(png|jpe?g|gif|webp|svg)(\?.*)?$/,
                 loader: 'url-loader',
                 options: {
                     name: 'img/[name]_[hash:6].[ext]',

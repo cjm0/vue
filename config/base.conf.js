@@ -22,7 +22,7 @@ module.exports = {
     dev: {
         useEslint: true,
         host: getIp(),
-        port: 3001,
+        port: 3011,
         proxy: [
             {
                 context: ['/v2', '/xw', '/wap', '/information'],

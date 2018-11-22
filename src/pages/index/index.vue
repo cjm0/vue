@@ -27,7 +27,8 @@ export default {
         }
     },
     created() {
-        Loading.show(1000, true)
+        console.log(process.env.NODE_ENV)
+        Loading.show()
     }
 };
 </script>

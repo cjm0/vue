@@ -41,17 +41,19 @@ module.exports = merge(baseWebpackConfig, {
                 messages: [`Your application is running here: http://${config.dev.host}:${config.dev.port}`],
             }
         }),
-        new CopyWebpackPlugin([ // 本地开发环境
+        new CopyWebpackPlugin( // 本地开发环境
+            [ 
                 { 
                     from: path.resolve(__dirname, '../dist/static/js/vendor.dll.js'),
                     to: './static/',
                 }
             ], 
             {
-                ignore: [],
+                ignore: ['.DS_Store'],
                 copyUnmodified: true, 
                 // debug: "debug" // 是否打印复制的详细信息
-        })
+            }
+        )
     ],
     devtool: 'cheap-module-eval-source-map',
 })

@@ -1,11 +1,11 @@
 <style lang="less">
     .temp_index{
-        
+        display: flex;
     }
 </style>
 
 <template lang="pug">
-    .temp_index temp
+    div(:class="$style.temp_index") temp
 </template>
 
 <script>

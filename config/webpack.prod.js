@@ -40,7 +40,7 @@ module.exports = merge(baseWebpackConfig, {
                 },
             ], 
             {
-                ignore: [], // 可以用模糊匹配
+                ignore: ['.DS_Store'],
                 copyUnmodified: true, 
                 // debug: "debug" // 是否打印复制的详细信息
             }

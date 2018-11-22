@@ -7,7 +7,8 @@
   "scripts": {
     "start": "webpack --config config/webpack.dll.js",
     "dev": "webpack-dev-server --progress --config config/webpack.dev.js",
-    "build": "webpack --progress --config config/webpack.prod.js"
+    "build": "webpack --progress --config config/webpack.prod.js",
+    "json": "webpack --profile --json > stats.json"
   },
   "license": "ISC",
   "engines": {

@@ -18,6 +18,7 @@ module.exports = {
     },
     env: {
         browser: true,
+        es6: true
     },
     extends: [
         // https://github.com/vuejs/eslint-plugin-vue#priority-a-essential-error-prevention
@@ -63,7 +64,7 @@ module.exports = {
         'indent': [0, 4], // 四个空格
         'quotes': [0, 'single'], // 使用单引号
         'no-alert': 1, // alert
-        'no-console': 1, // 提示console
+        'no-console': 0, // 提示console
         'no-unneeded-ternary': 1,//禁止不必要的嵌套 var isYes = answer === 1 ? true : false;
         'no-multi-str': 2,//字符串不能用\换行
         'keyword-spacing': 1, // 关键字后面加空格
