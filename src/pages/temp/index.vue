@@ -1,4 +1,4 @@
-<style lang="less">
+<style lang="less" module>
     .temp_index{
         display: flex;
     }
